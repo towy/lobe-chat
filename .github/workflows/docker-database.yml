@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY_IMAGE: ${{ secrets.DOCKER_REGISTRY_IMAGE || 'lobehub/lobe-chat-database' }}
+  REGISTRY_IMAGE: ${{ vars.DOCKER_REGISTRY_IMAGE }}
 
 jobs:
   build:
@@ -125,4 +125,4 @@ jobs:
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:latest
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
