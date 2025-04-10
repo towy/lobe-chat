@@ -212,19 +212,27 @@ export const createChatSlice: StateCreator<
   /* eslint-disable sort-keys-fix/sort-keys-fix */
 
   internal_dispatchAgentMap: (id, config, actions) => {
-      const validKeys = ['chatConfig', 'model', 'params', 'plugins', 'provider', 'systemRole', 'tts'];  // Keys from LobeAgentConfig
-      const filteredConfig = Object.fromEntries(
-        Object.entries(config).filter(([key]) => validKeys.includes(key as keyof LobeAgentConfig))
-      ) as DeepPartial<LobeAgentConfig>;
-  
-      const agentMap = produce(get().agentMap, (draft) => {
-        if (!draft[id]) {
-          draft[id] = filteredConfig;
-        } else {
-          draft[id] = merge(draft[id], filteredConfig);
-        }
-      });
-    
+    const validKeys = new Set([
+      'chatConfig',
+      'model',
+      'params',
+      'plugins',
+      'provider',
+      'systemRole',
+      'tts',
+    ]); // Keys from LobeAgentConfig
+    const filteredConfig = Object.fromEntries(
+      Object.entries(config).filter(([key]) => validKeys.has(key as keyof LobeAgentConfig)),
+    ) as DeepPartial<LobeAgentConfig>;
+
+    const agentMap = produce(get().agentMap, (draft) => {
+      if (!draft[id]) {
+        draft[id] = filteredConfig;
+      } else {
+        draft[id] = merge(draft[id], filteredConfig);
+      }
+    });
+
     if (isEqual(get().agentMap, agentMap)) return;
 
     set({ agentMap }, false, 'dispatchAgent' + (actions ? `/${actions}` : ''));
