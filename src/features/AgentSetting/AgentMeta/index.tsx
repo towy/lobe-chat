@@ -3,7 +3,7 @@
 import { Button, Form, type FormGroupItemType, type FormItemProps, Tooltip } from '@lobehub/ui';
 import isEqual from 'fast-deep-equal';
 import { Wand2 } from 'lucide-react';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FORM_STYLE } from '@/const/layoutTokens';
@@ -28,6 +28,9 @@ const AgentMeta = memo(() => {
   ]);
   const [isInbox, loadingState] = useStore((s) => [s.id === INBOX_SESSION_ID, s.loadingState]);
   const meta = useStore(selectors.currentMetaConfig, isEqual);
+  useEffect(() => {
+    form.setFieldsValue(meta);
+  }, [meta]);
   const [background, setBackground] = useState(meta.backgroundColor);
 
   if (isInbox) return;
