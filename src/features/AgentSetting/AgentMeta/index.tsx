@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, Form, type FormGroupItemType, type FormItemProps, Tooltip } from '@lobehub/ui';
+import { useUpdateEffect } from 'ahooks';
 import isEqual from 'fast-deep-equal';
 import { Wand2 } from 'lucide-react';
 import { memo, useState, useEffect } from 'react';
@@ -32,6 +33,10 @@ const AgentMeta = memo(() => {
     form.setFieldsValue(meta);
   }, [meta]);
   const [background, setBackground] = useState(meta.backgroundColor);
+
+  useUpdateEffect(() => {
+    form.setFieldsValue(meta);
+  }, [meta]);
 
   if (isInbox) return;
 
