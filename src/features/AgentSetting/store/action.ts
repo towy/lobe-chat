@@ -243,7 +243,25 @@ export const store: StateCreator<Store, [['zustand/devtools', never]]> = (set, g
 
     set({ config: nextConfig }, false, payload);
 
-    await get().onConfigChange?.(nextConfig);
+    const { onConfigChange } = get();
+    if (!onConfigChange) return;
+
+    switch (payload.type) {
+      case 'togglePlugin': {
+        await onConfigChange({ plugins: nextConfig.plugins });
+        break;
+      }
+
+      case 'update': {
+        await onConfigChange(payload.config);
+        break;
+      }
+
+      case 'reset': {
+        await onConfigChange(nextConfig);
+        break;
+      }
+    }
   },
   dispatchMeta: async (payload) => {
     const nextValue = metaDataReducer(get().meta, payload);

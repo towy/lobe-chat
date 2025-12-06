@@ -1,3 +1,5 @@
+import type { PartialDeep } from 'type-fest';
+
 import { DEFAULT_AGENT_META } from '@/const/meta';
 import { DEFAULT_AGENT_CONFIG } from '@/const/settings';
 import { LobeAgentConfig } from '@/types/agent';
@@ -11,7 +13,7 @@ export interface State {
   loading?: boolean;
   loadingState?: LoadingState;
   meta: MetaData;
-  onConfigChange?: (config: LobeAgentConfig) => void;
+  onConfigChange?: (config: PartialDeep<LobeAgentConfig>) => void;
   onMetaChange?: (meta: MetaData) => void;
 }
 
